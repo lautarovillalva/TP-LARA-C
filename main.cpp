@@ -1,16 +1,20 @@
 #include <iostream>
 using namespace std;
+#include "rlutil.h"
+using namespace rlutil;
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
-#include "rlutil.h"
-using namespace rlutil;
-#include "menus.h"
-#include "platos.h"
+#include <iomanip>
+#include "datos.h"
+#include "prototipos.h"
+#include "plato.h"
 #include "validaciones.h"
+#include "menus.h"
 
 int main()
 {
+    setColor(WHITE);
     bool salir = false;
     int opcion;
     while(!salir)
