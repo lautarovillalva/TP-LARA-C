@@ -1,6 +1,7 @@
 #ifndef VALIDACIONES_H_INCLUDED
 #define VALIDACIONES_H_INCLUDED
 
+//VALIDACIONES PLATO
 bool validar_plato_nombre(char nombre[50])
 {
     bool val = true;

@@ -6,7 +6,7 @@ int generarid_plato()
     FILE *p;
     p=fopen(ARCHIVO_PLATOS,"ab");
     fseek(p,SEEK_SET,SEEK_END);
-    int id=(ftell(p)/sizeof(plato))+1000;
+    int id=((ftell(p)/sizeof(plato))+1)*100;
     fclose(p);
     return id;
 }
