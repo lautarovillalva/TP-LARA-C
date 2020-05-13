@@ -32,9 +32,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="cliente.h" />
+		<Unit filename="configuracion.h" />
 		<Unit filename="datos.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="menus.h" />
+		<Unit filename="pedido.h" />
 		<Unit filename="plato.h" />
 		<Unit filename="prototipos.h" />
 		<Unit filename="validaciones.h" />

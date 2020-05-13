@@ -5,35 +5,41 @@ using namespace rlutil;
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
-#include <iomanip>
+#include <string>
+#include <time.h>
 #include "datos.h"
 #include "prototipos.h"
-#include "plato.h"
 #include "validaciones.h"
+#include "plato.h"
+#include "cliente.h"
+#include "pedido.h"
+#include "configuracion.h"
 #include "menus.h"
 
 int main()
 {
-    setColor(WHITE);
     bool salir = false;
     int opcion;
     while(!salir)
     {
+    setColor(WHITE);
         menuprincipal();
-        cin>>opcion;
+        opcion= ingresoEnteroValidado();
         switch(opcion)
         {
         case 1:     //PLATOS
         {
             plato_main();
-        } break;
+        }
+        break;
         case 2:     //CLIENTES
         {
-
-        } break;
+            cliente_main();
+        }
+        break;
         case 3:     //PEDIDOS
         {
-
+            pedido_main();
         } break;
         case 4:     //REPORTES
         {
@@ -41,16 +47,18 @@ int main()
         } break;
         case 5:     //CONFIGURACION
         {
-
+            configuracion_main();
         } break;
         case 0:     //SALIDA
         {
             salida(salir);
-        } break;
+        }
+        break;
         default:    //OPCION NO VALIDA!
         {
             salidadefault();
-        } break;
+        }
+        break;
 
         }
     }

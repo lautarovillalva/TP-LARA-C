@@ -5,49 +5,64 @@ int generarid_plato()
 {
     FILE *p;
     p=fopen(ARCHIVO_PLATOS,"ab");
-    fseek(p,SEEK_SET,SEEK_END);
+    fseek(p,0,SEEK_END);
     int id=((ftell(p)/sizeof(plato))+1)*100;
     fclose(p);
     return id;
 }
+int cantidadplatos()
+{
+
+    FILE * p;
+    p= fopen(ARCHIVO_PLATOS, "rb");
+    if(p == NULL)
+        return 0;
+    fseek(p, 0, SEEK_END);
+    int cant= ftell(p)/sizeof(plato);
+    fclose(p);
+    return cant;
+}
 bool cargar_plato(plato *reg)
 {
+    cout<<"-        1) NUEVO PLATO"<<endl;
     borde();
     reg->id=generarid_plato();
     cout<<"- ID AUTO GENERADO                : ";
     cout<< reg->id << endl;
     cout<<"- CARGAR NOMBRE                   : ";
-    cargarcadena(reg->nombre_plato, 50);
-    if (validar_plato_nombre(reg->nombre_plato)!=1)
+    char cadaux[50];
+    cargarcadena(cadaux, 50);
+    strcpy(cadaux,strupr(cadaux));
+    if (validar_plato_nombre(cadaux)!=1)
         return 0;
+    strcpy(reg->nombre_plato, cadaux);
     cout<<"- CARGAR COSTO DE PREPARACION     : $";
-    cin>> reg->costo_de_preparacion;
+    reg->costo_de_preparacion= ingresoFlotanteValidado();
     if (validar_plato_costodepreparacion(reg->costo_de_preparacion)!=1)
         return 0;
     cout<<"- CARGAR VALOR DE VENTA           : $";
-    cin>> reg->valor_de_venta;
+    reg->valor_de_venta=ingresoFlotanteValidado();
     if (validar_plato_valordeventa(reg->valor_de_venta,reg->costo_de_preparacion) !=1)
         return 0;
     cout<<"- CARGAR MINUTOS DE PREPARACION   : ";
-    cin>> reg->tiempo_de_preparacion;
+    reg->tiempo_de_preparacion= ingresoEnteroValidado();
     if (validar_plato_tiempodepreparacion(reg->tiempo_de_preparacion)!=1)
         return 0;
     cout<<"- CARGAR ID DE RESTAURANTE        : ";
-    cin>> reg->id_restaurante;
+    reg->id_restaurante= ingresoEnteroValidado();
     if (validar_plato_idrestaurante(reg->id_restaurante) !=1)
         return 0;
     cout<<"- CARGAR COMISION RESTAURANTE     : ";
-    cin>> reg->comision_restaurante;
+    reg->comision_restaurante= ingresoEnteroValidado();
     if (validar_plato_comisionrestaurante(reg->comision_restaurante) !=1)
         return 0;
     cout<<"- CARGAR CATEGORIA                : ";
-    cin>> reg->id_categoria;
+    reg->id_categoria= ingresoEnteroValidado();
     if (validar_plato_idcategoria(reg->id_categoria) !=1)
         return 0;
     reg->estado=true;
     return 1;
     borde();
-
 }
 bool guardar_plato(plato reg)
 {
@@ -62,38 +77,14 @@ bool guardar_plato(plato reg)
     fclose(p);
     return guardado;
 }
-void nuevo_plato()
-{
-    plato reg;
-    if(cargar_plato(&reg)==1)
-    {
-        if(guardar_plato(reg)==1)
-        {
-            borde();
-            cout<<"- PLATO GUARDADO!" <<endl;
-            borde();
-        }
-        else
-        {
-            borde();
-            cout<<"- ERROR AL GUARDAR PLATO!" << endl;
-            borde();
-        }
-    }
-    else
-    {
-        borde();
-        cout<<"- ERROR AL CARGAR PLATO!" << endl;
-        borde();
-    }
-    system("pause");
-}
+
 void modificar_plato()
 {
+    cout<<"-        2) MODIFICAR PLATO"<<endl;
     borde();
     int idaux;
     cout<<"- ID PLATO QUE DESEA MODIFICAR: ";
-    cin>>idaux;
+    idaux= ingresoEnteroValidado();
     bool modificado=false;
     FILE * p;
     plato reg;
@@ -110,16 +101,20 @@ void modificar_plato()
         if(idaux==reg.id && reg.estado==true)
         {
             borde();
-            cout<<"- MODIFICAR NUEVO COSTO DE VENTA: $";
-            cin>> reg.valor_de_venta;
+            cout<<"- "<< strupr(reg.nombre_plato)<< endl;
+            cout<<"- MODIFICAR NUEVO VALOR DE VENTA: $";
+            reg.valor_de_venta= ingresoFlotanteValidado();
             cout<<"- MODIFICAR NUEVO TIEMPO DE PREPARACION: ";
-            cin>> reg.tiempo_de_preparacion;
+            reg.tiempo_de_preparacion= ingresoEnteroValidado();
             borde();
             if(validar_plato_tiempodepreparacion(reg.tiempo_de_preparacion)==1 && validar_plato_valordeventa(reg.valor_de_venta, reg.costo_de_preparacion)==1)
             {
                 modificado=true;
                 fseek(p, ftell(p)-sizeof(plato), SEEK_SET);
                 fwrite(&reg, sizeof(plato), 1, p);
+                borde();
+                cout<<"- GUARDADO EXITOSO!" <<endl;
+                borde();
                 break;
             }
         }
@@ -137,7 +132,7 @@ void mostrarplato(plato reg)
     borde();
     cout<<"-  ID AUTOGENERADO        "<<": "<< reg.id << endl;
     cout<<"-  ESTADO                 "<<": "<< reg.estado << endl;
-    cout<<"-  NOMBRE                 "<<": "<< strupr(reg.nombre_plato) << endl;
+    cout<<"-  NOMBRE                 "<<": "<< reg.nombre_plato << endl;
     cout<<"-  COSTO DE PREPARACION   "<<": $"<< reg.costo_de_preparacion<< endl;
     cout<<"-  VALOR DE VENTA         "<<": $"<<reg.valor_de_venta<< endl;
     cout<<"-  MINUTOS DE PREPARACION "<<": "<< reg.tiempo_de_preparacion<< endl;
@@ -149,12 +144,12 @@ void mostrarplato(plato reg)
 }
 void listarplatoxid()
 {
+    cout<<"-        3) LISTAR PLATO POR ID"<<endl;
     borde();
     bool mostrado=false;
     int idaux;
     cout<<"- ID PLATO QUE DESEA LISTAR: ";
-    cin>>idaux;
-    bool modificado=false;
+    idaux= ingresoEnteroValidado();
     FILE * p;
     plato reg;
     p = fopen(ARCHIVO_PLATOS, "rb");
@@ -183,12 +178,13 @@ void listarplatoxid()
 }
 void listarplatoxrestaurante()
 {
+
+    cout<<"-        4) PLATOS POR RESTAURANT"<<endl;
     borde();
     bool mostrado=false;
     int resaux;
     cout<<"- ID RESTAURANTE QUE DESEA LISTAR: ";
-    cin>>resaux;
-    bool modificado=false;
+    resaux= ingresoEnteroValidado();
     FILE * p;
     plato reg;
     p = fopen(ARCHIVO_PLATOS, "rb");
@@ -217,6 +213,7 @@ void listarplatoxrestaurante()
 }
 void listarplatos()
 {
+    cout<<"-        5) LISTAR TODOS LOS PLATOS"<<endl;
     borde();
     FILE * p;
     plato reg;
@@ -237,8 +234,34 @@ void listarplatos()
     }
     fclose(p);
 }
+void nuevo_plato()
+{
+    plato reg;
+    if(cargar_plato(&reg)==1)
+    {
+        if(guardar_plato(reg)==1)
+        {
+            borde();
+            cout<<"- GUARDADO EXITOSO!" <<endl;
+            borde();
+        }
+        else
+        {
+            borde();
+            cout<<"- ERROR AL GUARDAR!" <<endl;
+            borde();
+        }
+    }
+    else
+    {
+        borde();
+        cout<<"- ERROR AL CARGAR!" << endl;
+        borde();
+    }
+}
 void eliminarplato()
 {
+    cout<<"-        6) ELIMINAR PLATO"<<endl;
     borde();
     bool eliminado= false;
     int idaux;
@@ -254,7 +277,7 @@ void eliminarplato()
     }
     borde();
     cout<<"- ID PLATO A ELIMINAR: ";
-    cin>>idaux;
+    idaux= ingresoEnteroValidado();
     borde();
     while(fread(&reg, sizeof(plato), 1, p)==1)
     {
@@ -266,6 +289,7 @@ void eliminarplato()
             fwrite(&reg, sizeof(plato), 1, p);
             fclose(p);
             borde();
+            cout<<"- "<< strupr(reg.nombre_plato) << endl;
             cout<<"- PLATO ELIMINADO!"<< endl;
             borde();
             return;
@@ -279,7 +303,40 @@ void eliminarplato()
     }
     fclose(p);
 }
-
+ int buscarplato(int idb)
+ {
+     plato reg;
+     int i=0;
+     FILE * p;
+     p = fopen(ARCHIVO_PLATOS, "rb");
+     if (p == NULL) return -2;
+     while(fread(&reg, sizeof(plato), 1, p)==1)
+     {
+         if(reg.id==idb)
+         {
+             fclose(p);
+             return i;
+         }
+         i++;
+     }
+     fclose(p);
+     return -1;
+ }
+ plato leerplato(int pos)
+ {
+     plato reg;
+     FILE * p;
+     p = fopen(ARCHIVO_PLATOS, "rb");
+     if(p == NULL)
+     {
+         reg.id = -1;
+         return reg;
+     }
+     fseek(p, pos * sizeof(plato), SEEK_SET);
+     fread(&reg, sizeof(plato), 1, p);
+     fclose(p);
+     return reg;
+ }
 void plato_main()
 {
     bool salir=false;
@@ -287,36 +344,13 @@ void plato_main()
     while(!salir)
     {
         menuplatos();
-        cin>>opcion;
+        opcion = ingresoEnteroValidado();
         switch(opcion)
         {
         case 1:     //NUEVO PATO
         {
-            plato reg;
-            if(cargar_plato(&reg)==1)
-            {
-                if(guardar_plato(reg)==1)
-                {
-                    borde();
-                    cout<<"- GUARDADO EXITOSO!" <<endl;
-                    borde();
-                    system("pause");
-                }
-                else
-                {
-                    borde();
-                    cout<<"- ERROR AL GUARDAR!" <<endl;
-                    borde();
-                    system("pause");
-                }
-            }
-            else
-            {
-                borde();
-                cout<<"- ERROR AL CARGAR!" << endl;
-                borde();
-                system("pause");
-            }
+            nuevo_plato();
+            system("pause");
         }
         break;
         case 2:     //MODIFICAR PLATO
