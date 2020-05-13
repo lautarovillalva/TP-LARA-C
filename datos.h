@@ -16,7 +16,8 @@ struct fecha
     int mes=0;
     int ano=0;
 };
-struct pedido{
+struct pedido
+{
     int id=0;
     int id_plato=0;
     int id_cliente=0;

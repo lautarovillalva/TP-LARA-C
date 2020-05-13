@@ -22,7 +22,7 @@ int main()
     int opcion;
     while(!salir)
     {
-    setColor(WHITE);
+        setColor(WHITE);
         menuprincipal();
         opcion= ingresoEnteroValidado();
         switch(opcion)
@@ -40,7 +40,8 @@ int main()
         case 3:     //PEDIDOS
         {
             pedido_main();
-        } break;
+        }
+        break;
         case 4:     //REPORTES
         {
 
@@ -48,7 +49,8 @@ int main()
         case 5:     //CONFIGURACION
         {
             configuracion_main();
-        } break;
+        }
+        break;
         case 0:     //SALIDA
         {
             salida(salir);

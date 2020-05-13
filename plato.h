@@ -303,40 +303,41 @@ void eliminarplato()
     }
     fclose(p);
 }
- int buscarplato(int idb)
- {
-     plato reg;
-     int i=0;
-     FILE * p;
-     p = fopen(ARCHIVO_PLATOS, "rb");
-     if (p == NULL) return -2;
-     while(fread(&reg, sizeof(plato), 1, p)==1)
-     {
-         if(reg.id==idb)
-         {
-             fclose(p);
-             return i;
-         }
-         i++;
-     }
-     fclose(p);
-     return -1;
- }
- plato leerplato(int pos)
- {
-     plato reg;
-     FILE * p;
-     p = fopen(ARCHIVO_PLATOS, "rb");
-     if(p == NULL)
-     {
-         reg.id = -1;
-         return reg;
-     }
-     fseek(p, pos * sizeof(plato), SEEK_SET);
-     fread(&reg, sizeof(plato), 1, p);
-     fclose(p);
-     return reg;
- }
+int buscarplato(int idb)
+{
+    plato reg;
+    int i=0;
+    FILE * p;
+    p = fopen(ARCHIVO_PLATOS, "rb");
+    if (p == NULL)
+        return -2;
+    while(fread(&reg, sizeof(plato), 1, p)==1)
+    {
+        if(reg.id==idb)
+        {
+            fclose(p);
+            return i;
+        }
+        i++;
+    }
+    fclose(p);
+    return -1;
+}
+plato leerplato(int pos)
+{
+    plato reg;
+    FILE * p;
+    p = fopen(ARCHIVO_PLATOS, "rb");
+    if(p == NULL)
+    {
+        reg.id = -1;
+        return reg;
+    }
+    fseek(p, pos * sizeof(plato), SEEK_SET);
+    fread(&reg, sizeof(plato), 1, p);
+    fclose(p);
+    return reg;
+}
 void plato_main()
 {
     bool salir=false;

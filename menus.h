@@ -67,7 +67,7 @@ void menupedidos()
 }
 void menuconfiguracion()
 {
- system("cls");
+    system("cls");
     borde();
     cout<<"-            MENU CONFIGURACION"<<endl;
     borde();

@@ -136,19 +136,22 @@ bool validar_cliente_cp(int codp)
 bool validar_pedido_cantidad(int cant)
 {
     bool val= true;
-    if(cant<0) val = false;
+    if(cant<0)
+        val = false;
     return val;
 }
 bool validar_pedido_valoracion(int valo)
 {
     bool val= true;
-    if(valo<0 || valo>10) val= false;
+    if(valo<0 || valo>10)
+        val= false;
     return val;
 }
 bool validar_pedido_estado(int estado)
 {
     bool val= true;
-    if(estado<1 || estado>3) return false;
+    if(estado<1 || estado>3)
+        return false;
     return val;
 }
 int ingresoEnteroValidado()
