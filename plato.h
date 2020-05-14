@@ -179,7 +179,7 @@ void listarplatoxid()
 void listarplatoxrestaurante()
 {
 
-    cout<<"-        4) PLATOS POR RESTAURANT"<<endl;
+    cout<<"-        4) LISTAR PLATOS POR RESTAURANT"<<endl;
     borde();
     bool mostrado=false;
     int resaux;
